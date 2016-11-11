@@ -20,6 +20,9 @@
   </head>
   <body>
     <main id="main">
+      <form id="formSearch">
+        Search: <input type="text" id="searchTerms"></input>
+      <a href=# onclick="searchRepositories()">Search Repositories</a>
       <div id="errors"></div>
     </main>
     <div class="flexbox-container">
@@ -29,9 +32,42 @@
       </div>
       <div>
         <h3>Details</h3>
-        <div id="details"></div>
+        <div id="details">
+          <script id="details-template" type="text/x-handlebars-template">
+            <ul>
+             {{#each this}}
+               <li>
+                 <h2><a href="{{html_url}}">{{name}}</a></h2>
+                 {{> userDetails author }}
+                 SHA: {{sha}}
+               </li>
+              {{/each}}
+            </ul>
+          </script>
+        </div>
       </div>
     </div>
+
+    <script id="repository-template" type="text/x-handlebars-template">
+      <ul>
+       {{#each this}}
+         <li>
+           <h2><a href="{{html_url}}">{{name}}</a></h2>
+           {{> userDetails owner }}
+           <p>Description: {{description}}</p>
+           <p>Forks: {{forks_count}}</p>
+           <p>Issues: {{open_issues_count}}</p>
+           <p><a href="#" onclick="getCommits(this)" data-repo="{{name}}" data-username="{{owner.login}}">Get Commits</a></p>
+         </li>
+        {{/each}}
+      </ul>
+    </script>
+    <script id="user-details-partial" type="text/x-handlebars-template">
+      <section>
+        <header><h4>Created By <a href="{{html_url}}">{{login}}</a></h4></header>
+        <img src="{{avatar_url}}" height="32" width="32">
+      </section>
+    </script>
     <script src="jquery-3.1.0.min.js"></script>
     <script src="handlebars.js"></script>
     <script src="index.js"></script>
